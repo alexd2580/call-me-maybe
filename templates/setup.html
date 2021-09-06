@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+  .table-preview {
+    overflow-y: scroll;
+  }
+</style>
+{% endblock %}
+{% block content %}
+<div class="tile is-ancestor">
+  <!-- Config pane. -->
+  <div class="tile is-parent is-vertical">
+    <!-- Google Sheets login box. -->
+    <div class="tile is-child notification is-primary">
+      <section class="section">
+        <div class="container has-text-centered">
+          <form action="setup/oauth2" method="POST">
+            <button class="button is-success">
+              <span class="icon">
+                <i class="fab fa-google"></i>
+              </span>
+              <span>Login to Google Sheets</span>
+            </button>
+            </td>
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <div class="tile is-child notification is-warning">
+      <!-- Sheet selector form. -->
+      <form action="setup/spreadsheet" method="POST">
+        <div class="field">
+          <label class="label">Source Domain</label>
+          <div class="control">
+            <input class="input" type="text" name="source_domain" value="{{ source_domain or "" }}">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Spreadsheet ID</label>
+          <div class="control">
+            <input class="input" type="text" name="spreadsheet_id" value="{{ spreadsheet_id or "" }}">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Sheet Name</label>
+          <div class="control">
+            <input class="input" type="text" name="sheet_name" value="{{ sheet_name or "" }}">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Match Column</label>
+          <div class="control">
+            <input class="input" type="text" name="match_column" value="{{ match_column or "" }}">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Date Column</label>
+          <div class="control">
+            <input class="input" type="text" name="date_column" value="{{ date_column or "" }}">
+          </div>
+        </div>
+        <div class="field">
+          <div class="control">
+            <button class="button is-success">
+              <span class="icon">
+                <i class="fas fa-save"></i>
+              </span>
+              <span>Save</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Installation instructions. -->
+    <div class="tile is-child notification is-danger">
+      <p>To get started add this to your page.</p>
+      &lt;img src="https://alexd2580.skytaxi.jp/visit" referrerPolicy="no-referrer-when-downgrade"&gt;&lt;/img&gt;
+    </div>
+  </div>
+
+  <!-- Sheet preview. -->
+  <div class="tile is-parent is-4">
+    <div class="tile is-child notification is-info table-preview">
+      {% if area_preview %}
+      <table class="table is-bordered is-narrow is-fullwidth is-striped">
+        <thead>
+          <tr>
+            <th></th>
+            <th>{{ match_column }}</th>
+            <th>{{ date_column }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in area_preview %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ row[0] or "" }}</td>
+            <td>{{ row[1] or "" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p>No preview available.</p>
+      {% endif %}
+    <div>
+  </div>
+<div>
+{% endblock %}

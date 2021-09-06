@@ -1,14 +1,12 @@
-import uuid
-
-from sqlalchemy import Column, String, DateTime
+from sqlalchemy import Column, DateTime, String
 
 from app.models import Base
+from app.models.mixins.id import IdModel
 
 
-class Link(Base):
+class Link(Base, IdModel):
     __tablename__ = "link"
 
-    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     description = Column(String, nullable=False)
     date_opened = Column(DateTime)
 

@@ -1,87 +1,70 @@
-<html>
-<head>
-  <title>Item Details</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-  <script src="https://kit.fontawesome.com/1304a07c20.js" crossorigin="anonymous"></script>
-  <script>
-    function copyToClipboard(text) {
-      navigator.clipboard.writeText(text);
-      alert("Copied the url: " + text);
-    }
-  </script>
-</head>
-<body>
-  <h1>Link Tracker</h1>
+{% extends "base.html" %}
+{% block content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Status</th>
+      <th>Link</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
 
-  <!-- Main content -->
-  <div class="container">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Description</th>
-          <th>Status</th>
-          <th>Link</th>
-          <th>Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-
-        {% for link in links %}
-        <tr>
-          <td>{{ link.description }}</td>
-          <td>
-              <span class="icon has-text-{{ "success" if link.date_opened else "danger" }}">
-              <i class="fas fa-circle"></i>
+    {% for link in links %}
+    <tr>
+      <td>{{ link.description }}</td>
+      <td>
+          <span class="icon has-text-{{ "success" if link.date_opened else "danger" }}">
+          <i class="fas fa-circle"></i>
+        </span>
+        <span>{{ link.date_opened if link.date_opened else "" }}</span>
+      </td>
+      <td>
+        <button class="button is-link" onclick="copyToClipboard('{{link.url}}')">
+          <span class="icon">
+            <i class="fas fa-clone"></i>
+          </span>
+          <span>{{ link.url }}</span>
+        </button>
+      </td>
+      <td>
+        <!-- Delete button -->
+        <form action="links/{{ link.id }}/delete" method="POST">
+          <button type="submit" class="button is-danger">
+            <span class="icon">
+              <i class="fas fa-minus-square"></i>
             </span>
-            <span>{{ link.date_opened if link.date_opened else "" }}</span>
-          </td>
-          <td>
-            <button class="button is-link" onclick="copyToClipboard('{{link.url}}')">
-              <span class="icon">
-                <i class="fas fa-clone"></i>
-              </span>
-              <span>{{ link.url }}</span>
-            </button>
-          </td>
-          <td>
-            <!-- Delete button -->
-            <form action="links/{{ link.id }}/delete" method="POST">
-              <button type="submit" class="button is-danger">
-                <span class="icon">
-                  <i class="fas fa-minus-square"></i>
-                </span>
-                <span>Delete</span>
-              </button>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
+            <span>Delete</span>
+          </button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
 
-      <tfoot>
-        <tr>
-          <form action="links" method="POST">
-            <td>
-              <input type="text" name="description">
-              </input>
-            </td>
-            <td>
-            </td>
-            <td>
-              <!-- <input type="text" name="url"> -->
-              <!-- </input> -->
-            </td>
-            <td>
-              <button class="button is-success">
-                <span class="icon">
-                  <i class="fas fa-plus-square"></i>
-                </span>
-                <span>Create</span>
-              </button>
-            </td>
-          </form>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-</body>
-</html>
+  <tfoot>
+    <tr>
+      <form action="links" method="POST">
+        <td>
+          <input type="text" name="description">
+          </input>
+        </td>
+        <td>
+        </td>
+        <td>
+          <!-- <input type="text" name="url"> -->
+          <!-- </input> -->
+        </td>
+        <td>
+          <button class="button is-success">
+            <span class="icon">
+              <i class="fas fa-plus-square"></i>
+            </span>
+            <span>Create</span>
+          </button>
+        </td>
+      </form>
+    </tr>
+  </tfoot>
+</table>
+{% endblock %}
